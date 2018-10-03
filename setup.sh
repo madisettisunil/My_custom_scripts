@@ -8,12 +8,9 @@ fi
 ### Functions ###
 
 function ubuntu_initialize() {
-	echo "Updating and Installing Dependicies"
+	echo "Updating distribution, installing git,disabling ipv6 and changing hostname"
 	apt-get -qq update > /dev/null 2>&1
-	apt-get -qq -y upgrade > /dev/null 2>&1
-	apt-get install -qq -y nmap > /dev/null 2>&1
 	apt-get install -qq -y git > /dev/null 2>&1
-	rm -r /var/log/exim4/ > /dev/null 2>&1
 
 	update-rc.d nfs-common disable > /dev/null 2>&1
 	update-rc.d rpcbind disable > /dev/null 2>&1
@@ -214,63 +211,6 @@ function get_dns_entries(){
 
 }
 
-function setupSSH(){
-	apt-get -qq -y install sudo > /dev/null 2>&1
-	apt-get -qq -y install fail2ban > /dev/null 2>&1
-
-	echo "Create a User to ssh into this system securely"
-
-	read -p "Enter your user name: " -r user_name
-
-	adduser $user_name
-
-	usermod -aG sudo $user_name
-
-	cat <<-EOF > /etc/ssh/sshd_config
-	Port 22
-	Protocol 2
-	HostKey /etc/ssh/ssh_host_rsa_key
-	HostKey /etc/ssh/ssh_host_dsa_key
-	HostKey /etc/ssh/ssh_host_ecdsa_key
-	#Privilege Separation is turned on for security
-	UsePrivilegeSeparation yes
-	KeyRegenerationInterval 3600
-	ServerKeyBits 1024
-	SyslogFacility AUTH
-	LogLevel INFO
-	LoginGraceTime 120
-	PermitRootLogin no
-	StrictModes yes
-	RSAAuthentication yes
-	PubkeyAuthentication yes
-	IgnoreRhosts yes
-	RhostsRSAAuthentication no
-	HostbasedAuthentication no
-	PermitEmptyPasswords no
-	ChallengeResponseAuthentication no
-	PasswordAuthentication yes
-	X11Forwarding yes
-	X11DisplayOffset 10
-	PrintMotd no
-	PrintLastLog yes
-	TCPKeepAlive yes
-	Banner no
-	AcceptEnv LANG LC_*
-	Subsystem sftp /usr/lib/openssh/sftp-server
-	UsePAM yes
-	EOF
-
-	echo "AllowUsers ${user_name}" > /etc/ssh/sshd_config
-
-	cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-
-	cd /home/$user_name
-	runuser -l $user_name -c "mkdir '.ssh'"
-	runuser -l $user_name -c "chmod 700 ~/.ssh"
-
-	service ssh restart
-
-}
 
 function Install_GoPhish {
 	apt-get install unzip > /dev/null 2>&1
@@ -315,28 +255,25 @@ function Install_IRedMail {
 }
 
 PS3="Server Setup Script - Pick an option: "
-options=("Setup SSH" "Ubuntu Prep" "Install SSL" "Get DNS Entries" "Install GoPhish" "Install IRedMail" "reset firewall" "add firewall port")
+options=("Ubuntu Prep" "Install SSL" "Get DNS Entries" "Install GoPhish" "Install IRedMail" "reset firewall" "add firewall port")
 select opt in "${options[@]}" "Quit"; do
 
     case "$REPLY" in
 
     #Prep
-    1) setupSSH;;
+  	        1) ubuntu_initialize;;
 
-		2) ubuntu_initialize;;
+		2) install_ssl_Cert;;
 
-		3) install_ssl_Cert;;
+		3) get_dns_entries;;
 
-		4) get_dns_entries;;
+		4) Install_GoPhish;;
 
-		5) Install_GoPhish;;
+		5) Install_IRedMail;;
 
-		6) Install_IRedMail;;
+		6) reset_firewall;;
 		
-		7) reset_firewall;;
-		
-		8) add_firewall_port;;
-		
+		7) add_firewall_port;;		
 		
 
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
