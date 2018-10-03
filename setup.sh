@@ -254,14 +254,25 @@ function Install_IRedMail {
 	./iRedMail.sh
 }
 
+	
+	function add_gophish_service () {
+
+	mkdir /var/log/gophish
+	mkdir /root/scripts
+	touch /etc/init.d/gophish
+	git clone https://github.com/madisettisunil/My_custom_scripts.git /root/scripts/
+	cp /root/scripts/Gophish\ service /etc/init.d/gophish
+	chmod +x /etc/init.d/gophish
+}
+	
 PS3="Server Setup Script - Pick an option: "
-options=("Ubuntu Prep" "Install SSL" "Get DNS Entries" "Install GoPhish" "Install IRedMail" "reset firewall" "add firewall port")
+options=("Ubuntu Prep" "Install SSL" "Get DNS Entries" "Install GoPhish" "Install IRedMail" "reset firewall" "add firewall port" "add gophish service daemon")
 select opt in "${options[@]}" "Quit"; do
 
     case "$REPLY" in
 
     #Prep
-  	        1) ubuntu_initialize;;
+    1) ubuntu_initialize;;
 
 		2) install_ssl_Cert;;
 
@@ -273,8 +284,9 @@ select opt in "${options[@]}" "Quit"; do
 
 		6) reset_firewall;;
 		
-		7) add_firewall_port;;		
+		7) add_firewall_port;;	
 		
+		8) add_gophish_service;;	
 
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
     *) echo "Invalid option. Try another one.";continue;;
