@@ -263,6 +263,8 @@ function Install_IRedMail {
 	git clone https://github.com/madisettisunil/My_custom_scripts.git /root/scripts/
 	cp /root/scripts/Gophish\ service /etc/init.d/gophish
 	chmod +x /etc/init.d/gophish
+	echo " performing cleanup "
+	rm -r /root/scripts/
 }
 	
 PS3="Server Setup Script - Pick an option: "
