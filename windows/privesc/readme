@@ -1,2 +1,15 @@
 
 exploit suggester
+
+
+install dependencies
+
+(install python-xlrd, $ pip install xlrd --upgrade)
+
+feed it "systeminfo" input, and point it to the microsoft database
+
+$ ./windows-exploit-suggester.py --database 2014-06-06-mssb.xlsx --systeminfo win7sp1-systeminfo.txt 
+
+possible exploits for an operating system can be used without hotfix data
+
+$ ./windows-exploit-suggester.py --database 2014-06-06-mssb.xlsx --ostext 'windows server 2008 r2'
