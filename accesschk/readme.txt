@@ -1,5 +1,5 @@
 
-accesschk_xp is for xp only it requires accesschk 5.2
+accesschk_xp.exe is for xp only it requires accesschk 5.2
 
 dont forger accepteula
 
