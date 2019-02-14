@@ -1,0 +1,40 @@
+New game plan - dont rush
+
+Organise folders immedietly after starting exam
+
+start by enumeration, run following appropriately and save outputs and screenshots
+
+
+========================================================================================
+
+unicornscan -v -U -I -p 1-65535 10.10.10.18    -----------> always start with unicornscan it will give you all ports then probe ports using nc, then use following script scans 
+
+
+
+nmap -sV -Pn -vv -p PORTNUMBER --script=http-vhosts,http-userdir-enum,http-apache-negotiation,http-backup-finder,http-config-backup,http-default-accounts,http-email-harvest,http-methods,http-method-tamper,http-passwd,http-robots.txt -oN http_10.10.10.10.nmap 10.10.10.10
+
+
+nmap -vv -sV -Pn -p PORTNUMBER --script=ms-sql-info,ms-sql-config,ms-sql-dump-hashes --script-args=mssql.instance-port=1433,smsql.username-sa,mssql.password-sa -oX 10.10.10.10_mssql.xml
+
+
+nmap -vv -Pn -A -sC -sU -T 4 --top-ports 200 -oA IPADDRESS_udp_quick 10.10.10.10
+
+
+===========================================================================================
+
+dirb http://10.10.10.10:9999 /usr/share/wordlists/dirb/big.txt -S -r
+
+dirb http://10.10.10.10:9999 /usr/share/dirb/wordlists/vulns/apache.txt -S -r
+
+============================================================================================
+
+nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-netstat,snmp-processes 10.10.10.18
+
+nmap -sV -Pn -vv -p 21 --script=ftp-anon,ftp-bounce,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoor,ftp-vuln-cve2010-4221 -oA IPaddress_ftp.nmap 10.10.10.18
+
+hydra -L wordlists/userlist -P wordlists/offsecpass -f -o ipaddress_ftphydra.txt -u 10.10.10.19 -s 21 ftp
+
+=============================================================================================
+
+
+
