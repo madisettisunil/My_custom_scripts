@@ -34,3 +34,6 @@ hydra -L wordlists/userlist -P wordlists/offsecpass -f -o ipaddress_ftphydra.txt
 
 
 
+dirsearch -u https://10.10.10.7/ -w ./raft-medium-directories.txt -e php,txt
+
+
