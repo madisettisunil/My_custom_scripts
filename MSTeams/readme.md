@@ -1,5 +1,5 @@
 Azure Active Directory V2 PowerShell Module. A minimum version of 2.0.2.106 is required
-![managing teams app permission policies](./images/app_permission_policy_management.PNG)
+![managing teams app permission policies](./images/menu.PNG)
 
 prerequisites
 
